@@ -4,13 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -b",
+    "dev": "npm run build && node dist/index.js",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
+    "@prisma/client": "^6.18.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
     "prisma": "^6.18.0"
   }
 }
