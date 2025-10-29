@@ -9,3 +9,7 @@ PublicHandler.get("/Health", (req, res) => {
         Message: "Public Route Up and Running"
     });
 });
+
+PublicHandler.get("/", (req, res) => {
+
+});
