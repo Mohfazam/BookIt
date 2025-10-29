@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ExperienceInputSchema = exports.SlotInputSchema = void 0;
+exports.PromoInputSchema = exports.ExperienceInputSchema = exports.SlotInputSchema = void 0;
 const zod_1 = require("zod");
 exports.SlotInputSchema = zod_1.z.object({
     date: zod_1.z.string().refine((d) => !isNaN(Date.parse(d)), { message: "Invalid date format" }),
@@ -15,4 +15,10 @@ exports.ExperienceInputSchema = zod_1.z.object({
     location: zod_1.z.string().min(2, "Location required"),
     about: zod_1.z.string().min(10, "About section too short"),
     slots: zod_1.z.array(exports.SlotInputSchema).optional(),
+});
+exports.PromoInputSchema = zod_1.z.object({
+    code: zod_1.z.string().min(3, "Promo code must be at least 3 characters long"),
+    discountType: zod_1.z.enum(["PERCENTAGE", "FLAT"]),
+    value: zod_1.z.number().positive("Value must be greater than 0"),
+    isActive: zod_1.z.boolean().optional().default(true),
 });

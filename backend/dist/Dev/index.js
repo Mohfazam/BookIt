@@ -71,3 +71,42 @@ exports.DevHandler.post("/experiences", (req, res) => __awaiter(void 0, void 0, 
         });
     }
 }));
+exports.DevHandler.post("/promos", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const parsed = Types_1.PromoInputSchema.safeParse(req.body);
+        if (!parsed.success) {
+            return res.status(400).json({
+                message: "Invalid promo data",
+                errors: parsed.error,
+            });
+        }
+        const { code, discountType, value, isActive } = parsed.data;
+        const existingPromo = yield prisma.promo.findUnique({
+            where: { code },
+        });
+        if (existingPromo) {
+            return res.status(409).json({
+                message: "Promo code already exists",
+            });
+        }
+        const promo = yield prisma.promo.create({
+            data: {
+                code,
+                discountType,
+                value,
+                isActive,
+            },
+        });
+        return res.status(201).json({
+            message: "Promo added successfully",
+            data: promo,
+        });
+    }
+    catch (error) {
+        console.error("Error adding promo:", error);
+        return res.status(500).json({
+            message: "Something went wrong",
+            error: error.message,
+        });
+    }
+}));
