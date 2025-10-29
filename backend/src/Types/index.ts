@@ -19,6 +19,11 @@ export const ExperienceInputSchema = z.object({
   slots: z.array(SlotInputSchema).optional(),
 });
 
+export const PromoInputSchema = z.object({
+  code: z.string().min(3, "Promo code must be at least 3 characters long"),
+  discountType: z.enum(["PERCENTAGE", "FLAT"]),
+  value: z.number().positive("Value must be greater than 0"),
+  isActive: z.boolean().optional().default(true),
+});
 
-export type SlotInput = z.infer<typeof SlotInputSchema>;
-export type ExperienceInput = z.infer<typeof ExperienceInputSchema>;
+
