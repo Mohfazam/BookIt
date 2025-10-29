@@ -10,15 +10,3 @@ PublicHandler.get("/Health", (req, res) => {
     });
 });
 
-PublicHandler.get("/", (req, res) => {
-
-});
-
-PublicHandler.get("/", (req, res) => {
-
-});
-
-
-PublicHandler.get("/", (req, res) => {
-
-});
