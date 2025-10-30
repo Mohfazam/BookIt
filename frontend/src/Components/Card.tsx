@@ -11,7 +11,7 @@ interface CardProps {
 
 const Card = ({ id, title, desc, location, imageURL, price }: CardProps) => {
   return (
-    <div className="w-[280px] h-[312px] flex flex-col rounded-[12px] overflow-hidden">
+    <div className="w-[280px] h-[312px] flex flex-col rounded-[12px] overflow-hidden lazy-loading">
       <div>
         <img src={imageURL} alt={title} className="object-cover h-[170px] w-[280px]" draggable={false} />
       </div>
