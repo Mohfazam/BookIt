@@ -1,4 +1,7 @@
+import Link from 'next/link';
+
 interface CardProps {
+  id: string;
   title: string;
   desc: string;
   location: string;
@@ -6,7 +9,7 @@ interface CardProps {
   price: number;
 }
 
-const Card = ({ title, desc, location, imageURL, price }: CardProps) => {
+const Card = ({ id, title, desc, location, imageURL, price }: CardProps) => {
   return (
     <div className="w-[280px] h-[312px] flex flex-col rounded-[12px] overflow-hidden">
       <div>
@@ -31,9 +34,11 @@ const Card = ({ title, desc, location, imageURL, price }: CardProps) => {
               <span className="leading-[16px] text-[12px]">From</span>
               <span className="text-[20px] leading-[24px]">₹{price}</span>
             </div>
-            <button className="w-[99px] h-[30px] px-[8px] py-[6px] rounded-[4px] bg-[#FFD643]">
-              <span className="block text-[#161616] text-[12px] leading-[18px]">View Details</span>
-            </button>
+            <Link href={`/experience/${id}`}>
+              <button className="w-[99px] h-[30px] px-[8px] py-[6px] rounded-[4px] bg-[#FFD643] hover:bg-[#ffc107] transition-colors">
+                <span className="block text-[#161616] text-[12px] leading-[18px]">View Details</span>
+              </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -31,6 +31,7 @@ const CardGrid = ({ experiences, loading }: { experiences: Experience[]; loading
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[24px] justify-items-center py-8">
       {experiences.map((exp) => (
         <Card
+          id={exp.id}
           key={exp.id}
           title={exp.title}
           desc={exp.description}
