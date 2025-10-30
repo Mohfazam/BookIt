@@ -9,8 +9,10 @@ const Card = () => {
             <div className="bg-[#F0F0F0] h-full overflow-hidden px-[16px] gap-[20px] py-[12px]">
                 <div className="flex flex-col gap-[12px]">
                     <div className="flex justify-between">
-                        <span className="text-[16px] leading-[20px] text-[#161616]">Kayaking</span>
-                        <span className="bg-[#D6D6D6] px-[6px] py-[4px] rounded-[4px] w-[48px] h-[24px] leading-[16px] text-[11px] text-[#161616]">Udipi</span>
+                        <span className="inline-celx text-[16px] leading-[20px] text-[#161616]">Kayaking</span>
+                        <span className="inline-flex items-center justify-center bg-[#D6D6D6] px-[8px] py-[4px] rounded-[4px] text-[11px] leading-[16px] text-[#161616]">
+                            Udipi
+                        </span>
                     </div>
 
                     <div className="h-[32px]">
