@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, Minus, Plus } from "lucide-react";
 import Link from 'next/link';
+import { spawn } from 'child_process';
 
 interface Slot {
     id: string;
@@ -30,7 +31,8 @@ export default function ExperienceDetailPage() {
     const [experience, setExperience] = useState<ExperienceDetail | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [Quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(1);
+    const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
     useEffect(() => {
         if (id) {
@@ -47,6 +49,10 @@ export default function ExperienceDetailPage() {
 
             if (result.success && result.data) {
                 setExperience(result.data);
+                
+                if (result.data.slots && result.data.slots.length > 0) {
+                    setSelectedDate(result.data.slots[0].date);
+                }
             } else {
                 setError('Experience not found');
             }
@@ -56,6 +62,33 @@ export default function ExperienceDetailPage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleQuantityChange = (change: number) => {
+        const newQuantity = quantity + change;
+        if (newQuantity >= 1) {
+            setQuantity(newQuantity);
+        }
+    };
+
+    
+    const getUniqueDates = () => {
+        if (!experience?.slots) return [];
+
+        const uniqueDatesMap = new Map<string, Slot>();
+        experience.slots.forEach(slot => {
+            if (!uniqueDatesMap.has(slot.date)) {
+                uniqueDatesMap.set(slot.date, slot);
+            }
+        });
+
+        return Array.from(uniqueDatesMap.values());
+    };
+
+    
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     };
 
     if (loading) {
@@ -79,10 +112,11 @@ export default function ExperienceDetailPage() {
         );
     }
 
+    const uniqueDates = getUniqueDates();
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-            <div className="space-y-4">
+        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 lazy-loading">
+            <div className="space-y-6 mb-4">
                 <div className='flex w-[74px] h-[20px] text-[#000000] justify-between items-center hover:cursor-pointer py-6'>
                     <Link href={"/"} className='flex justify-between items-center w-[74px] h-[20px]'>
                         <ArrowLeft size={20} />
@@ -91,12 +125,9 @@ export default function ExperienceDetailPage() {
                 </div>
 
                 <div className='flex gap-8'>
-
-
                     <div className='w-[765px] h-[381px] rounded-[12px] overflow-hidden'>
-                        <img src={experience.image} alt={experience.title} className='w-full h-full object-cover' draggable={false}/>
+                        <img src={experience.image} alt={experience.title} className='w-full h-full object-cover' draggable={false} />
                     </div>
-
 
                     <div className='w-[387px] h-[303px] px-[24px] py-[24px] rounded-[12px] bg-[#EFEFEF] flex flex-col gap-4'>
                         <div className='w-[339px] h-[22px] flex justify-between items-center'>
@@ -107,15 +138,23 @@ export default function ExperienceDetailPage() {
                         <div className='w-[339px] h-[22px] flex justify-between items-center'>
                             <span className='block w-[65px] h-[20px] text-[16px] leading-[20px] text-[#656565]'>Quantity</span>
                             <div className='w-[44px] h-[22px] text-[18px] leading-[22px] text-[#161616] flex items-center gap-2'>
-                                <Minus size={16} className='hover:cursor-pointer' onClick={() => setQuantity(Quantity-1)}/>
-                                    <span className='block w-[6px] h-[14px] text-[12px] leading-[14px]'>{Quantity}</span>
-                                <Plus size={16} className='hover:cursor-pointer' onClick={() => setQuantity(Quantity+1)}/>
+                                <Minus
+                                    size={16}
+                                    className='hover:cursor-pointer hover:text-[#FFD643] transition-colors'
+                                    onClick={() => handleQuantityChange(-1)}
+                                />
+                                <span className='block w-[6px] h-[14px] text-[12px] leading-[14px]'>{quantity}</span>
+                                <Plus
+                                    size={16}
+                                    className='hover:cursor-pointer hover:text-[#FFD643] transition-colors'
+                                    onClick={() => handleQuantityChange(1)}
+                                />
                             </div>
                         </div>
 
                         <div className='w-[339px] h-[22px] flex justify-between items-center'>
                             <span className='block w-[65px] h-[20px] text-[16px] leading-[20px] text-[#656565]'>Subtotal</span>
-                            <span className='w-[44px] h-[22px] text-[18px] leading-[22px] text-[#161616] text-right'>₹{experience.price * Quantity}</span>
+                            <span className='w-[44px] h-[22px] text-[18px] leading-[22px] text-[#161616] text-right'>₹{experience.price * quantity}</span>
                         </div>
 
                         <div className='w-[339px] h-[22px] flex justify-between items-center'>
@@ -123,15 +162,82 @@ export default function ExperienceDetailPage() {
                             <span className='w-[44px] h-[22px] text-[18px] leading-[22px] text-[#161616] text-right'>₹59</span>
                         </div>
 
-                        <div className='w-[339px] h-[1px] bg-[#D9D9D9] '/>
+                        <div className='w-[339px] h-[1px] bg-[#D9D9D9] ' />
 
                         <div className='w-[339px] h-[24px] flex justify-between items-center'>
                             <span className='block w-[48px] h-[24px] text-[20px] leading-[24px] font-bold text-[#161616]'>Total</span>
-                            <span className='w-[44px] h-[22px] text-[20px] leading-[24px] text-[#161616] font-bold text-right'>₹{ (experience.price * Quantity ) + 59}</span>
+                            <span className='w-[44px] h-[22px] text-[20px] leading-[24px] text-[#161616] font-bold text-right'>₹{(experience.price * quantity) + 59}</span>
                         </div>
 
-                        <div className='w-[339px] h-[44px] px-[20px] py-[12px]  rounded-[8px] bg-[#FFD643]'>
-                            <span className='block font-normal w-[62px] h-[20px] leading-[20px] text-[#161616] text-center'>Confirm</span>
+                        <button className="w-[339px] h-[44px] rounded-[8px] bg-[#FFD643] hover:bg-[#ffc107] transition-colors flex items-center justify-center">
+                            <span className="font-normal text-[#161616] text-center">Confirm</span>
+                        </button>
+
+                    </div>
+                </div>
+
+                <div className='w-[765px] h-[406px] flex flex-col gap-[32px]'>
+                    <span className='block w-full h-[24px] font-normal text-[24px] leading-[32px] text-[#161616] text-left'>
+                        {experience.title}
+                    </span>
+
+                    <span className='font-light text-[16px] leading-[24px] text-[#6C6C6C] text-left'>{experience.description}</span>
+
+                    <div className='flex flex-col gap-2'>
+                        <span className='block font-normal text-[18px] leading-[22px] text-[#161616]'>Choose Date</span>
+                        <div className="flex gap-2 flex-wrap">
+                            {uniqueDates.map((slot) => (
+                                <button
+                                    key={slot.id}
+                                    onClick={() => setSelectedDate(slot.date)}
+                                    className={`${selectedDate === slot.date
+                                        ? "bg-[#FFD643] text-[#161616]"
+                                        : "border border-[#BDBDBD] text-[#838383]"
+                                        } px-4 py-2 rounded-[4px] text-[14px] text-center transition-all hover:border-[#FFD643]`}
+                                >
+                                    {formatDate(slot.date)}
+                                </button>
+                            ))}
+                        </div>
+
+                    </div>
+
+                    {selectedDate && (
+                        <div className="flex flex-col gap-2">
+                            <span className="block font-normal text-[18px] leading-[22px] text-[#161616]">
+                                Choose Time
+                            </span>
+                            <div className="flex gap-2 flex-wrap">
+                                {experience.slots
+                                    .filter((slot) => slot.date === selectedDate)
+                                    .map((slot) => (
+                                        <button
+                                            key={slot.id}
+                                            disabled={!slot.available}
+                                            className={`${slot.available
+                                                ? 'border border-[#BDBDBD] text-[#161616] hover:border-[#FFD643]'
+                                                : 'border border-[#E0E0E0] text-[#838383] bg-[#CCCCCC] cursor-not-allowed'
+                                                } min-w-[100px] h-[34px] px-[12px] py-[6px] rounded-[4px] text-[14px] text-center transition-all flex items-center justify-center gap-1`}
+                                        >
+                                            <span>{slot.time}</span>
+                                            {!slot.available && (
+                                                <span className="text-[12px] text-[#6A6A6A]">(Sold Out)</span>
+                                            )}
+                                        </button>
+                                    ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <span className='text-[#838383] text-[12px] leading-[16px]'>All times are in IST (GMT +5:30)</span>
+
+                    <div className='flex flex-col gap-4'>
+                        <span className='block w-full h-[24px] font-normal text-[24px] leading-[32px] text-[#161616] text-left'>
+                            About
+                        </span>
+
+                        <div className='w-[765px] h-[32px] px-[12px] py-[8px] rounded-[4px]  bg-[#EEEEEE] mb-4'>
+                            <span className='block text-[12px] text-[#838383]'>{experience.about}</span>
                         </div>
                     </div>
 
