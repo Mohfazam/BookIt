@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, Minus, Plus } from "lucide-react";
 import Link from 'next/link';
-import { spawn } from 'child_process';
 
 interface Slot {
     id: string;
@@ -24,6 +23,17 @@ interface ExperienceDetail {
     slots: Slot[];
 }
 
+interface BookingData {
+    experienceId: string;
+    slotId: string;
+    quantity: number;
+    subtotal: number;
+    taxes: number;
+    totalPrice: number;
+    selectedDate: string;
+    selectedTime: string;
+}
+
 export default function ExperienceDetailPage() {
     const params = useParams();
     const id = params.id as string;
@@ -33,12 +43,36 @@ export default function ExperienceDetailPage() {
     const [error, setError] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
+    const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
+
+    
+    const [bookingData, setBookingData] = useState<BookingData | null>(null);
 
     useEffect(() => {
         if (id) {
             fetchExperienceDetail();
         }
     }, [id]);
+
+    
+    useEffect(() => {
+        if (experience && selectedSlot) {
+            const subtotal = experience.price * quantity;
+            const taxes = 59;
+            const totalPrice = subtotal + taxes;
+
+            setBookingData({
+                experienceId: experience.id,
+                slotId: selectedSlot.id,
+                quantity: quantity,
+                subtotal: subtotal,
+                taxes: taxes,
+                totalPrice: totalPrice,
+                selectedDate: selectedSlot.date,
+                selectedTime: selectedSlot.time,
+            });
+        }
+    }, [experience, selectedSlot, quantity]);
 
     const fetchExperienceDetail = async () => {
         try {
@@ -71,7 +105,19 @@ export default function ExperienceDetailPage() {
         }
     };
 
-    
+    const handleSlotSelection = (slot: Slot) => {
+        if (slot.available) {
+            setSelectedSlot(slot);
+        }
+    };
+
+    const handleConfirm = () => {
+        if (bookingData) {
+            console.log('Booking Data:', bookingData);
+            
+        }
+    };
+
     const getUniqueDates = () => {
         if (!experience?.slots) return [];
 
@@ -85,7 +131,6 @@ export default function ExperienceDetailPage() {
         return Array.from(uniqueDatesMap.values());
     };
 
-    
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -113,6 +158,9 @@ export default function ExperienceDetailPage() {
     }
 
     const uniqueDates = getUniqueDates();
+    const subtotal = experience.price * quantity;
+    const taxes = 59;
+    const total = subtotal + taxes;
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 lazy-loading">
@@ -154,25 +202,28 @@ export default function ExperienceDetailPage() {
 
                         <div className='w-[339px] h-[22px] flex justify-between items-center'>
                             <span className='block w-[65px] h-[20px] text-[16px] leading-[20px] text-[#656565]'>Subtotal</span>
-                            <span className='w-[44px] h-[22px] text-[18px] leading-[22px] text-[#161616] text-right'>₹{experience.price * quantity}</span>
+                            <span className='w-[44px] h-[22px] text-[18px] leading-[22px] text-[#161616] text-right'>₹{subtotal}</span>
                         </div>
 
                         <div className='w-[339px] h-[22px] flex justify-between items-center'>
                             <span className='block w-[65px] h-[20px] text-[16px] leading-[20px] text-[#656565]'>Taxes</span>
-                            <span className='w-[44px] h-[22px] text-[18px] leading-[22px] text-[#161616] text-right'>₹59</span>
+                            <span className='w-[44px] h-[22px] text-[18px] leading-[22px] text-[#161616] text-right'>₹{taxes}</span>
                         </div>
 
                         <div className='w-[339px] h-[1px] bg-[#D9D9D9] ' />
 
                         <div className='w-[339px] h-[24px] flex justify-between items-center'>
                             <span className='block w-[48px] h-[24px] text-[20px] leading-[24px] font-bold text-[#161616]'>Total</span>
-                            <span className='w-[44px] h-[22px] text-[20px] leading-[24px] text-[#161616] font-bold text-right'>₹{(experience.price * quantity) + 59}</span>
+                            <span className='w-[44px] h-[22px] text-[20px] leading-[24px] text-[#161616] font-bold text-right'>₹{total}</span>
                         </div>
 
-                        <button className="w-[339px] h-[44px] rounded-[8px] bg-[#FFD643] hover:bg-[#ffc107] transition-colors flex items-center justify-center">
+                        <button 
+                            onClick={handleConfirm}
+                            disabled={!selectedSlot}
+                            className="w-[339px] h-[44px] rounded-[8px] bg-[#FFD643] hover:bg-[#ffc107] transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
                             <span className="font-normal text-[#161616] text-center">Confirm</span>
                         </button>
-
                     </div>
                 </div>
 
@@ -199,7 +250,6 @@ export default function ExperienceDetailPage() {
                                 </button>
                             ))}
                         </div>
-
                     </div>
 
                     {selectedDate && (
@@ -213,10 +263,14 @@ export default function ExperienceDetailPage() {
                                     .map((slot) => (
                                         <button
                                             key={slot.id}
+                                            onClick={() => handleSlotSelection(slot)}
                                             disabled={!slot.available}
-                                            className={`${slot.available
-                                                ? 'border border-[#BDBDBD] text-[#161616] hover:border-[#FFD643]'
-                                                : 'border border-[#E0E0E0] text-[#838383] bg-[#CCCCCC] cursor-not-allowed'
+                                            className={`${
+                                                selectedSlot?.id === slot.id
+                                                    ? 'bg-[#FFD643] border-[#FFD643] text-[#161616]'
+                                                    : slot.available
+                                                    ? 'border border-[#BDBDBD] text-[#161616] hover:border-[#FFD643]'
+                                                    : 'border border-[#E0E0E0] text-[#838383] bg-[#CCCCCC] cursor-not-allowed'
                                                 } min-w-[100px] h-[34px] px-[12px] py-[6px] rounded-[4px] text-[14px] text-center transition-all flex items-center justify-center gap-1`}
                                         >
                                             <span>{slot.time}</span>
@@ -236,13 +290,20 @@ export default function ExperienceDetailPage() {
                             About
                         </span>
 
-                        <div className='w-[765px] h-[32px] px-[12px] py-[8px] rounded-[4px]  bg-[#EEEEEE] mb-4'>
+                        <div className='w-[765px] h-[32px] px-[12px] py-[8px] rounded-[4px] bg-[#EEEEEE] mb-4'>
                             <span className='block text-[12px] text-[#838383]'>{experience.about}</span>
                         </div>
                     </div>
-
                 </div>
             </div>
+
+            {/* Debug info - Remove this in production */}
+            {bookingData && (
+                <div className="mt-8 p-4 bg-gray-100 rounded">
+                    <h3 className="font-bold mb-2">Booking Data (for API call):</h3>
+                    <pre className="text-xs overflow-auto">{JSON.stringify(bookingData, null, 2)}</pre>
+                </div>
+            )}
         </div>
     );
 }
