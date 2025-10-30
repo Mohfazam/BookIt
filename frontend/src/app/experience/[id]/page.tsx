@@ -220,7 +220,7 @@ export default function ExperienceDetailPage() {
                         <button 
                             onClick={handleConfirm}
                             disabled={!selectedSlot}
-                            className="w-[339px] h-[44px] rounded-[8px] bg-[#FFD643] hover:bg-[#ffc107] transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-[339px] h-[44px] rounded-[8px] bg-[#FFD643] hover:bg-[#ffc107] transition-colors flex items-center justify-center hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <span className="font-normal text-[#161616] text-center">Confirm</span>
                         </button>
@@ -269,7 +269,7 @@ export default function ExperienceDetailPage() {
                                                 selectedSlot?.id === slot.id
                                                     ? 'bg-[#FFD643] border-[#FFD643] text-[#161616]'
                                                     : slot.available
-                                                    ? 'border border-[#BDBDBD] text-[#161616] hover:border-[#FFD643]'
+                                                    ? 'border border-[#BDBDBD] text-[#161616] hover:border-[#FFD643] hover:cursor-pointer'
                                                     : 'border border-[#E0E0E0] text-[#838383] bg-[#CCCCCC] cursor-not-allowed'
                                                 } min-w-[100px] h-[34px] px-[12px] py-[6px] rounded-[4px] text-[14px] text-center transition-all flex items-center justify-center gap-1`}
                                         >

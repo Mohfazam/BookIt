@@ -33,7 +33,7 @@ const Navbar = () => {
               onKeyPress={handleKeyPress}
               className="bg-[#EDEDED] text-[#727272] w-full sm:w-[280px] md:w-[340px] h-[42px] px-[16px] py-[12px] rounded focus:outline-none focus:ring-2 focus:ring-[#FFD643] transition-all"
             />
-            <button className="w-full sm:w-[87px] h-[42px] bg-[#FFD643] text-[#161616] px-[20px] text-center rounded-[8px] flex items-center justify-center hover:bg-[#ffc107] active:scale-95 transition-all duration-200 font-medium">
+            <button className="w-full sm:w-[87px] h-[42px] bg-[#FFD643] text-[#161616] px-[20px] text-center rounded-[8px] flex items-center justify-center hover:bg-[#ffc107] active:scale-95 transition-all duration-200 font-medium hover:cursor-pointer">
               Search
             </button>
           </div>
