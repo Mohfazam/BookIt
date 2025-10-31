@@ -110,12 +110,6 @@ BookIt/
 
 ---
 
-## 📸 Screenshots
-
-Add a few screenshots from your running app here (Home, Experience Detail, Checkout)
-
----
-
 ## 🧑‍💻 Developer
 
 **Mohammed Sarwar Khan**
