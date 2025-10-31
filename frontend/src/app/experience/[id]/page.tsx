@@ -44,8 +44,6 @@ export default function ExperienceDetailPage() {
     const [quantity, setQuantity] = useState(1);
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
-
-    
     const [bookingData, setBookingData] = useState<BookingData | null>(null);
 
     useEffect(() => {
@@ -54,7 +52,6 @@ export default function ExperienceDetailPage() {
         }
     }, [id]);
 
-    
     useEffect(() => {
         if (experience && selectedSlot) {
             const subtotal = experience.price * quantity;
@@ -114,7 +111,6 @@ export default function ExperienceDetailPage() {
     const handleConfirm = () => {
         if (bookingData) {
             console.log('Booking Data:', bookingData);
-            
         }
     };
 
@@ -163,8 +159,9 @@ export default function ExperienceDetailPage() {
     const total = subtotal + taxes;
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 lazy-loading">
-            <div className="space-y-6 mb-4">
+        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div className="space-y-4 sm:space-y-6 mb-4">
+                
                 <div className='flex w-[74px] h-[20px] text-[#000000] justify-between items-center hover:cursor-pointer py-6'>
                     <Link href={"/"} className='flex justify-between items-center w-[74px] h-[20px]'>
                         <ArrowLeft size={20} />
@@ -172,26 +169,29 @@ export default function ExperienceDetailPage() {
                     </Link>
                 </div>
 
-                <div className='flex gap-8'>
-                    <div className='w-[765px] h-[381px] rounded-[12px] overflow-hidden'>
+                
+                <div className='flex flex-col lg:flex-row gap-4 lg:gap-8'>
+                    
+                    <div className='w-full lg:w-[765px] h-[250px] sm:h-[300px] lg:h-[381px] rounded-[12px] overflow-hidden'>
                         <img src={experience.image} alt={experience.title} className='w-full h-full object-cover' draggable={false} />
                     </div>
 
-                    <div className='w-[387px] h-[303px] px-[24px] py-[24px] rounded-[12px] bg-[#EFEFEF] flex flex-col gap-4'>
-                        <div className='w-[339px] h-[22px] flex justify-between items-center'>
-                            <span className='block w-[65px] h-[20px] text-[16px] leading-[20px] text-[#656565]'>Starts at</span>
-                            <span className='w-[44px] h-[22px] text-[18px] leading-[22px] text-[#161616] text-right'>₹{experience.price}</span>
+                    
+                    <div className='w-full lg:w-[387px] px-[24px] py-[24px] rounded-[12px] bg-[#EFEFEF] flex flex-col gap-4'>
+                        <div className='w-full flex justify-between items-center'>
+                            <span className='block text-[16px] leading-[20px] text-[#656565]'>Starts at</span>
+                            <span className='text-[18px] leading-[22px] text-[#161616] text-right'>₹{experience.price}</span>
                         </div>
 
-                        <div className='w-[339px] h-[22px] flex justify-between items-center'>
-                            <span className='block w-[65px] h-[20px] text-[16px] leading-[20px] text-[#656565]'>Quantity</span>
-                            <div className='w-[44px] h-[22px] text-[18px] leading-[22px] text-[#161616] flex items-center gap-2'>
+                        <div className='w-full flex justify-between items-center'>
+                            <span className='block text-[16px] leading-[20px] text-[#656565]'>Quantity</span>
+                            <div className='text-[18px] leading-[22px] text-[#161616] flex items-center gap-2'>
                                 <Minus
                                     size={16}
                                     className='hover:cursor-pointer hover:text-[#FFD643] transition-colors'
                                     onClick={() => handleQuantityChange(-1)}
                                 />
-                                <span className='block w-[6px] h-[14px] text-[12px] leading-[14px]'>{quantity}</span>
+                                <span className='block min-w-[20px] text-center text-[12px] leading-[14px]'>{quantity}</span>
                                 <Plus
                                     size={16}
                                     className='hover:cursor-pointer hover:text-[#FFD643] transition-colors'
@@ -200,42 +200,44 @@ export default function ExperienceDetailPage() {
                             </div>
                         </div>
 
-                        <div className='w-[339px] h-[22px] flex justify-between items-center'>
-                            <span className='block w-[65px] h-[20px] text-[16px] leading-[20px] text-[#656565]'>Subtotal</span>
-                            <span className='w-[44px] h-[22px] text-[18px] leading-[22px] text-[#161616] text-right'>₹{subtotal}</span>
+                        <div className='w-full flex justify-between items-center'>
+                            <span className='block text-[16px] leading-[20px] text-[#656565]'>Subtotal</span>
+                            <span className='text-[18px] leading-[22px] text-[#161616] text-right'>₹{subtotal}</span>
                         </div>
 
-                        <div className='w-[339px] h-[22px] flex justify-between items-center'>
-                            <span className='block w-[65px] h-[20px] text-[16px] leading-[20px] text-[#656565]'>Taxes</span>
-                            <span className='w-[44px] h-[22px] text-[18px] leading-[22px] text-[#161616] text-right'>₹{taxes}</span>
+                        <div className='w-full flex justify-between items-center'>
+                            <span className='block text-[16px] leading-[20px] text-[#656565]'>Taxes</span>
+                            <span className='text-[18px] leading-[22px] text-[#161616] text-right'>₹{taxes}</span>
                         </div>
 
-                        <div className='w-[339px] h-[1px] bg-[#D9D9D9] ' />
+                        <div className='w-full h-[1px] bg-[#D9D9D9]' />
 
-                        <div className='w-[339px] h-[24px] flex justify-between items-center'>
-                            <span className='block w-[48px] h-[24px] text-[20px] leading-[24px] font-bold text-[#161616]'>Total</span>
-                            <span className='w-[44px] h-[22px] text-[20px] leading-[24px] text-[#161616] font-bold text-right'>₹{total}</span>
+                        <div className='w-full flex justify-between items-center'>
+                            <span className='block text-[20px] leading-[24px] font-bold text-[#161616]'>Total</span>
+                            <span className='text-[20px] leading-[24px] text-[#161616] font-bold text-right'>₹{total}</span>
                         </div>
 
                         <button 
                             onClick={handleConfirm}
                             disabled={!selectedSlot}
-                            className="w-[339px] h-[44px] rounded-[8px] bg-[#FFD643] hover:bg-[#ffc107] transition-colors flex items-center justify-center hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full h-[44px] rounded-[8px] bg-[#FFD643] hover:bg-[#ffc107] transition-colors flex items-center justify-center hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <span className="font-normal text-[#161616] text-center">Confirm</span>
                         </button>
                     </div>
                 </div>
 
-                <div className='w-[765px] h-[406px] flex flex-col gap-[32px]'>
-                    <span className='block w-full h-[24px] font-normal text-[24px] leading-[32px] text-[#161616] text-left'>
+                
+                <div className='w-full flex flex-col gap-6 lg:gap-[32px]'>
+                    <span className='block w-full font-normal text-[20px] sm:text-[24px] leading-[28px] sm:leading-[32px] text-[#161616] text-left'>
                         {experience.title}
                     </span>
 
-                    <span className='font-light text-[16px] leading-[24px] text-[#6C6C6C] text-left'>{experience.description}</span>
+                    <span className='font-light text-[14px] sm:text-[16px] leading-[20px] sm:leading-[24px] text-[#6C6C6C] text-left'>{experience.description}</span>
 
+                    
                     <div className='flex flex-col gap-2'>
-                        <span className='block font-normal text-[18px] leading-[22px] text-[#161616]'>Choose Date</span>
+                        <span className='block font-normal text-[16px] sm:text-[18px] leading-[20px] sm:leading-[22px] text-[#161616]'>Choose Date</span>
                         <div className="flex gap-2 flex-wrap">
                             {uniqueDates.map((slot) => (
                                 <button
@@ -244,7 +246,7 @@ export default function ExperienceDetailPage() {
                                     className={`${selectedDate === slot.date
                                         ? "bg-[#FFD643] text-[#161616]"
                                         : "border border-[#BDBDBD] text-[#838383]"
-                                        } px-4 py-2 rounded-[4px] text-[14px] text-center transition-all hover:border-[#FFD643]`}
+                                        } px-3 sm:px-4 py-2 rounded-[4px] text-[12px] sm:text-[14px] text-center transition-all hover:border-[#FFD643]`}
                                 >
                                     {formatDate(slot.date)}
                                 </button>
@@ -252,9 +254,10 @@ export default function ExperienceDetailPage() {
                         </div>
                     </div>
 
+                    
                     {selectedDate && (
                         <div className="flex flex-col gap-2">
-                            <span className="block font-normal text-[18px] leading-[22px] text-[#161616]">
+                            <span className="block font-normal text-[16px] sm:text-[18px] leading-[20px] sm:leading-[22px] text-[#161616]">
                                 Choose Time
                             </span>
                             <div className="flex gap-2 flex-wrap">
@@ -271,11 +274,11 @@ export default function ExperienceDetailPage() {
                                                     : slot.available
                                                     ? 'border border-[#BDBDBD] text-[#161616] hover:border-[#FFD643] hover:cursor-pointer'
                                                     : 'border border-[#E0E0E0] text-[#838383] bg-[#CCCCCC] cursor-not-allowed'
-                                                } min-w-[100px] h-[34px] px-[12px] py-[6px] rounded-[4px] text-[14px] text-center transition-all flex items-center justify-center gap-1`}
+                                                } min-w-[90px] sm:min-w-[100px] h-[34px] px-[10px] sm:px-[12px] py-[6px] rounded-[4px] text-[12px] sm:text-[14px] text-center transition-all flex items-center justify-center gap-1`}
                                         >
                                             <span>{slot.time}</span>
                                             {!slot.available && (
-                                                <span className="text-[12px] text-[#6A6A6A]">(Sold Out)</span>
+                                                <span className="text-[10px] sm:text-[12px] text-[#6A6A6A]">(Sold Out)</span>
                                             )}
                                         </button>
                                     ))}
@@ -283,27 +286,22 @@ export default function ExperienceDetailPage() {
                         </div>
                     )}
 
-                    <span className='text-[#838383] text-[12px] leading-[16px]'>All times are in IST (GMT +5:30)</span>
+                    <span className='text-[#838383] text-[11px] sm:text-[12px] leading-[14px] sm:leading-[16px]'>All times are in IST (GMT +5:30)</span>
 
+                    
                     <div className='flex flex-col gap-4'>
-                        <span className='block w-full h-[24px] font-normal text-[24px] leading-[32px] text-[#161616] text-left'>
+                        <span className='block w-full font-normal text-[20px] sm:text-[24px] leading-[28px] sm:leading-[32px] text-[#161616] text-left'>
                             About
                         </span>
 
-                        <div className='w-[765px] h-[32px] px-[12px] py-[8px] rounded-[4px] bg-[#EEEEEE] mb-4'>
-                            <span className='block text-[12px] text-[#838383]'>{experience.about}</span>
+                        <div className='w-full px-[12px] py-[8px] rounded-[4px] bg-[#EEEEEE] mb-4'>
+                            <span className='block text-[11px] sm:text-[12px] text-[#838383]'>{experience.about}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Debug info - Remove this in production */}
-            {bookingData && (
-                <div className="mt-8 p-4 bg-gray-100 rounded">
-                    <h3 className="font-bold mb-2">Booking Data (for API call):</h3>
-                    <pre className="text-xs overflow-auto">{JSON.stringify(bookingData, null, 2)}</pre>
-                </div>
-            )}
+            
         </div>
     );
 }
