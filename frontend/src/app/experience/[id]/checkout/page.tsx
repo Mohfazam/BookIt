@@ -112,8 +112,7 @@ export default function CheckoutPage() {
     try {
       setIsLoading(true);
 
-      // Backend expects the BASE experience price (without taxes)
-      // If promo is applied, calculate the discounted base price
+      
       let priceToSend = basePrice;
       
       if (validPromo && promoData) {
@@ -143,9 +142,10 @@ export default function CheckoutPage() {
 
       if (response.data) {
         console.log("Booking confirmed:", response.data);
-        alert(`Booking confirmed: ${response.data}`);
+        // alert(`Booking confirmed: ${response.data}`);
         localStorage.setItem("confirmationData", JSON.stringify(response.data));
-        router.push("/confirmation");
+        const id = response.data.booking.id;
+        router.push(`/confirmation/${id}`);
       }
     } catch (error: any) {
       console.error("Booking error:", error);
@@ -162,7 +162,7 @@ export default function CheckoutPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
       <div className="space-y-4 sm:space-y-6 mb-4">
-        {/* Back Button */}
+        
         <div className="flex w-[74px] h-[20px] text-[#000000] justify-between items-center hover:cursor-pointer py-6">
           <button
             onClick={() => router.back()}
@@ -173,10 +173,10 @@ export default function CheckoutPage() {
           </button>
         </div>
 
-        <div className="flex justify-between">
-          <div className="w-[739px] h-[198px] px-[24px] py-[20px] rounded-[12px] bg-[#EFEFEF] flex flex-col gap-[32px]">
-            <div className="flex gap-[24px]">
-              <div className="flex flex-col w-[333px] h-[68px] gap-[8px]">
+        <div className="flex flex-col lg:flex-row justify-between gap-6 lg:gap-8">
+          <div className="w-full lg:w-[739px] px-[24px] py-[20px] rounded-[12px] bg-[#EFEFEF] flex flex-col gap-[32px]">
+            <div className="flex flex-col sm:flex-row gap-[24px]">
+              <div className="flex flex-col w-full sm:w-[333px] gap-[8px]">
                 <span className="text-[#5B5B5B] leading-[18px] text-[14px]">
                   Full name
                 </span>
@@ -184,12 +184,12 @@ export default function CheckoutPage() {
                   type="text"
                   placeholder="Your Name"
                   value={name}
-                  className="w-[333px] h-[42px] px-[16px] py-[12px] rounded-[6px] bg-[#DDDDDD] text-[14px] leading-[18px] text-[#161616] placeholder:text-[#727272]"
+                  className="w-full h-[42px] px-[16px] py-[12px] rounded-[6px] bg-[#DDDDDD] text-[14px] leading-[18px] text-[#161616] placeholder:text-[#727272]"
                   onChange={handleName}
                 />
               </div>
 
-              <div className="flex flex-col w-[333px] h-[68px] gap-[8px]">
+              <div className="flex flex-col w-full sm:w-[333px] gap-[8px]">
                 <span className="text-[#5B5B5B] leading-[18px] text-[14px]">
                   Email
                 </span>
@@ -197,30 +197,30 @@ export default function CheckoutPage() {
                   type="email"
                   placeholder="Your Email"
                   value={email}
-                  className="w-[333px] h-[42px] px-[16px] py-[12px] rounded-[6px] bg-[#DDDDDD] text-[14px] leading-[18px] text-[#161616] placeholder:text-[#727272]"
+                  className="w-full h-[42px] px-[16px] py-[12px] rounded-[6px] bg-[#DDDDDD] text-[14px] leading-[18px] text-[#161616] placeholder:text-[#727272]"
                   onChange={handleEmail}
                 />
               </div>
             </div>
-            <span className="text-[#727272] text-[10px] block absolute top-[42%]">
+            <span className="text-[#727272] text-[10px] block">
               Apply <span className="text-[#24AC39]">'SAVE10'</span> For instant
               10% Discount
             </span>
             <div className="flex gap-[24px]">
-              <div className="flex w-[691px] flex-col gap-[8px]">
-                <div className="flex gap-4">
+              <div className="flex w-full flex-col gap-[8px]">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <input
                     type="text"
                     placeholder="Promo Code"
                     value={promo}
                     disabled={validPromo}
-                    className="w-[604px] h-[42px] px-[16px] py-[12px] rounded-[6px] bg-[#DDDDDD] text-[14px] leading-[18px] text-[#161616] placeholder:text-[#727272] disabled:opacity-60"
+                    className="w-full sm:flex-1 h-[42px] px-[16px] py-[12px] rounded-[6px] bg-[#DDDDDD] text-[14px] leading-[18px] text-[#161616] placeholder:text-[#727272] disabled:opacity-60"
                     onChange={handlePromo}
                   />
                   <button
                     onClick={validatePromo}
                     disabled={isLoading || validPromo}
-                    className="w-[71px] h-[42px] px-[16px] py-[12px] rounded-[8px] bg-[#161616] text-[14px] leading-[18px] text-[#F9F9F9] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2a2a2a] transition-colors"
+                    className="w-full sm:w-[71px] h-[42px] px-[16px] py-[12px] rounded-[8px] bg-[#161616] text-[14px] leading-[18px] text-[#F9F9F9] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2a2a2a] transition-colors"
                   >
                     {validPromo ? "Applied" : "Apply"}
                   </button>
@@ -239,7 +239,7 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          {/* Checkout Card */}
+          
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             <div className="w-full lg:w-[387px] px-[24px] py-[24px] rounded-[12px] bg-[#EFEFEF] flex flex-col gap-4">
               <div className="w-full flex justify-between items-center">
