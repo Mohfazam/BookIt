@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useState } from 'react';
 
 interface CardProps {
   id: string;
@@ -10,10 +11,25 @@ interface CardProps {
 }
 
 const Card = ({ id, title, desc, location, imageURL, price }: CardProps) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <div className="w-[280px] h-[312px] flex flex-col rounded-[12px] overflow-hidden lazy-loading">
-      <div>
-        <img src={imageURL} alt={title} className="object-cover h-[170px] w-[280px]" draggable={false} />
+      <div className="relative bg-[#E0E0E0]">
+        {!imageLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-8 h-8 border-4 border-[#D6D6D6] border-t-[#161616] rounded-full animate-spin"></div>
+          </div>
+        )}
+        <img 
+          src={imageURL} 
+          alt={title} 
+          className={`object-cover h-[170px] w-[280px] transition-opacity duration-300 ${
+            imageLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+          draggable={false}
+          onLoad={() => setImageLoaded(true)}
+        />
       </div>
 
       <div className="bg-[#F0F0F0] h-full overflow-hidden px-[16px] gap-[20px] py-[12px]">

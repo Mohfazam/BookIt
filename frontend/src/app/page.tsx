@@ -14,6 +14,36 @@ interface Experience {
   about: string;
 }
 
+//skeleon grid
+const SkeletonCard = () => (
+  <div className="w-[280px] h-[312px] flex flex-col rounded-[12px] overflow-hidden animate-pulse">
+    <div className="bg-[#E0E0E0] h-[170px] w-[280px]" />
+    <div className="bg-[#F0F0F0] h-full px-[16px] py-[12px] flex flex-col gap-[12px]">
+      <div className="flex justify-between items-start gap-[8px]">
+        <div className="flex-1 h-[20px] bg-[#D6D6D6] rounded-[4px]" />
+        <div className="w-[60px] h-[24px] bg-[#D6D6D6] rounded-[4px]" />
+      </div>
+      <div className="space-y-2">
+        <div className="h-[16px] bg-[#D6D6D6] rounded-[4px] w-full" />
+        <div className="h-[16px] bg-[#D6D6D6] rounded-[4px] w-3/4" />
+      </div>
+      <div className="flex justify-between items-center mt-auto">
+        <div className="h-[24px] bg-[#D6D6D6] rounded-[4px] w-[80px]" />
+        <div className="w-[99px] h-[30px] bg-[#D6D6D6] rounded-[4px]" />
+      </div>
+    </div>
+  </div>
+);
+
+
+const LoadingGrid = () => (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 py-8">
+    {[...Array(8)].map((_, index) => (
+      <SkeletonCard key={index} />
+    ))}
+  </div>
+);
+
 export default function Page() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,7 +83,7 @@ export default function Page() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <CardGrid experiences={filteredExperiences} loading={loading} />
+      {loading ? <LoadingGrid /> : <CardGrid experiences={filteredExperiences} loading={loading} />}
     </div>
   );
 }
