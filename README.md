@@ -42,7 +42,6 @@ Create a `.env` file in the `backend` folder:
 
 ```env
 DATABASE_URL="postgresql://<username>:<password>@localhost:5432/bookit"
-PORT=4000
 ```
 
 Generate Prisma client and start the server:
@@ -61,13 +60,6 @@ npm run dev
 ```
 
 The frontend will run on `http://localhost:3000`
-
-### 🌐 Environment Variables (Frontend)
-Create a `.env.local` in the frontend folder:
-
-```env
-NEXT_PUBLIC_API_BASE_URL="http://localhost:4000/api"
-```
 
 ---
 
