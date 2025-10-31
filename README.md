@@ -115,7 +115,7 @@ BookIt/
 **Mohammed Sarwar Khan**
 
 - [Resume](https://drive.google.com/file/d/1qD-kUkfvaTRNuQuBgZ1d8-qxxSw2l31k/view?usp=drive_link)
-- [LinkedIn](www.linkedin.com/in/mohammed-sarwar-khan)
+- [LinkedIn](https://www.linkedin.com/in/mohammed-sarwar-khan)
 - [GitHub](https://github.com/Mohfazam)
 
 ---
