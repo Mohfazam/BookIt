@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, Minus, Plus } from "lucide-react";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
 
 interface Slot {
     id: string;
@@ -24,6 +26,7 @@ interface ExperienceDetail {
 }
 
 interface BookingData {
+    experience: string;
     experienceId: string;
     slotId: string;
     quantity: number;
@@ -35,6 +38,8 @@ interface BookingData {
 }
 
 export default function ExperienceDetailPage() {
+    const router = useRouter();
+
     const params = useParams();
     const id = params.id as string;
 
@@ -59,6 +64,7 @@ export default function ExperienceDetailPage() {
             const totalPrice = subtotal + taxes;
 
             setBookingData({
+                experience: experience.title,
                 experienceId: experience.id,
                 slotId: selectedSlot.id,
                 quantity: quantity,
@@ -80,7 +86,7 @@ export default function ExperienceDetailPage() {
 
             if (result.success && result.data) {
                 setExperience(result.data);
-                
+
                 if (result.data.slots && result.data.slots.length > 0) {
                     setSelectedDate(result.data.slots[0].date);
                 }
@@ -110,7 +116,11 @@ export default function ExperienceDetailPage() {
 
     const handleConfirm = () => {
         if (bookingData) {
-            console.log('Booking Data:', bookingData);
+            console.log('Booking Data:', JSON.stringify(bookingData));
+            if (typeof window !== "undefined") {
+                localStorage.setItem("bookingData", JSON.stringify(bookingData));
+                router.push(`/experience/${id}/checkout`);
+            }
         }
     };
 
@@ -161,7 +171,7 @@ export default function ExperienceDetailPage() {
     return (
         <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
             <div className="space-y-4 sm:space-y-6 mb-4">
-                
+
                 <div className='flex w-[74px] h-[20px] text-[#000000] justify-between items-center hover:cursor-pointer py-6'>
                     <Link href={"/"} className='flex justify-between items-center w-[74px] h-[20px]'>
                         <ArrowLeft size={20} />
@@ -169,14 +179,14 @@ export default function ExperienceDetailPage() {
                     </Link>
                 </div>
 
-                
+
                 <div className='flex flex-col lg:flex-row gap-4 lg:gap-8'>
-                    
+
                     <div className='w-full lg:w-[765px] h-[250px] sm:h-[300px] lg:h-[381px] rounded-[12px] overflow-hidden'>
                         <img src={experience.image} alt={experience.title} className='w-full h-full object-cover' draggable={false} />
                     </div>
 
-                    
+
                     <div className='w-full lg:w-[387px] px-[24px] py-[24px] rounded-[12px] bg-[#EFEFEF] flex flex-col gap-4'>
                         <div className='w-full flex justify-between items-center'>
                             <span className='block text-[16px] leading-[20px] text-[#656565]'>Starts at</span>
@@ -217,7 +227,7 @@ export default function ExperienceDetailPage() {
                             <span className='text-[20px] leading-[24px] text-[#161616] font-bold text-right'>₹{total}</span>
                         </div>
 
-                        <button 
+                        <button
                             onClick={handleConfirm}
                             disabled={!selectedSlot}
                             className="w-full h-[44px] rounded-[8px] bg-[#FFD643] hover:bg-[#ffc107] transition-colors flex items-center justify-center hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
@@ -227,7 +237,7 @@ export default function ExperienceDetailPage() {
                     </div>
                 </div>
 
-                
+
                 <div className='w-full flex flex-col gap-6 lg:gap-[32px]'>
                     <span className='block w-full font-normal text-[20px] sm:text-[24px] leading-[28px] sm:leading-[32px] text-[#161616] text-left'>
                         {experience.title}
@@ -235,7 +245,7 @@ export default function ExperienceDetailPage() {
 
                     <span className='font-light text-[14px] sm:text-[16px] leading-[20px] sm:leading-[24px] text-[#6C6C6C] text-left'>{experience.description}</span>
 
-                    
+
                     <div className='flex flex-col gap-2'>
                         <span className='block font-normal text-[16px] sm:text-[18px] leading-[20px] sm:leading-[22px] text-[#161616]'>Choose Date</span>
                         <div className="flex gap-2 flex-wrap">
@@ -254,7 +264,7 @@ export default function ExperienceDetailPage() {
                         </div>
                     </div>
 
-                    
+
                     {selectedDate && (
                         <div className="flex flex-col gap-2">
                             <span className="block font-normal text-[16px] sm:text-[18px] leading-[20px] sm:leading-[22px] text-[#161616]">
@@ -268,12 +278,11 @@ export default function ExperienceDetailPage() {
                                             key={slot.id}
                                             onClick={() => handleSlotSelection(slot)}
                                             disabled={!slot.available}
-                                            className={`${
-                                                selectedSlot?.id === slot.id
+                                            className={`${selectedSlot?.id === slot.id
                                                     ? 'bg-[#FFD643] border-[#FFD643] text-[#161616]'
                                                     : slot.available
-                                                    ? 'border border-[#BDBDBD] text-[#161616] hover:border-[#FFD643] hover:cursor-pointer'
-                                                    : 'border border-[#E0E0E0] text-[#838383] bg-[#CCCCCC] cursor-not-allowed'
+                                                        ? 'border border-[#BDBDBD] text-[#161616] hover:border-[#FFD643] hover:cursor-pointer'
+                                                        : 'border border-[#E0E0E0] text-[#838383] bg-[#CCCCCC] cursor-not-allowed'
                                                 } min-w-[90px] sm:min-w-[100px] h-[34px] px-[10px] sm:px-[12px] py-[6px] rounded-[4px] text-[12px] sm:text-[14px] text-center transition-all flex items-center justify-center gap-1`}
                                         >
                                             <span>{slot.time}</span>
@@ -288,7 +297,7 @@ export default function ExperienceDetailPage() {
 
                     <span className='text-[#838383] text-[11px] sm:text-[12px] leading-[14px] sm:leading-[16px]'>All times are in IST (GMT +5:30)</span>
 
-                    
+
                     <div className='flex flex-col gap-4'>
                         <span className='block w-full font-normal text-[20px] sm:text-[24px] leading-[28px] sm:leading-[32px] text-[#161616] text-left'>
                             About
@@ -301,7 +310,7 @@ export default function ExperienceDetailPage() {
                 </div>
             </div>
 
-            
+
         </div>
     );
 }

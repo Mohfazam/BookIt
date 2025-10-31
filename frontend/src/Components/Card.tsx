@@ -36,7 +36,7 @@ const Card = ({ id, title, desc, location, imageURL, price }: CardProps) => {
             </div>
             <Link href={`/experience/${id}`}>
               <button className="w-[99px] h-[30px] px-[8px] py-[6px] rounded-[4px] bg-[#FFD643] hover:bg-[#ffc107] transition-colors">
-                <span className="block text-[#161616] text-[12px] leading-[18px]">View Details</span>
+                <span className="block text-[#161616] text-[12px] leading-[18px] hover:cursor-pointer">View Details</span>
               </button>
             </Link>
           </div>
