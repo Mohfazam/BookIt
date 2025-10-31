@@ -31,11 +31,11 @@ export default function CheckoutPage() {
   const subtotal = experience?.subtotal || 0;
   const taxes = experience?.taxes || 0;
   const baseTotal = experience?.totalPrice || 0;
-  
-  
+
+
   const basePrice = experience?.basePrice || subtotal;
 
-  
+
   const displayTotal = baseTotal - discount;
 
   const handlePromo = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +68,7 @@ export default function CheckoutPage() {
         setValidPromo(true);
         setPromoData(response.data.data);
 
-        
+
         let discountAmount = 0;
         if (response.data.data.discountType === "FLAT") {
           discountAmount = response.data.data.value;
@@ -93,7 +93,7 @@ export default function CheckoutPage() {
   };
 
   const handleConfirm = async () => {
-    
+
     if (!name.trim()) {
       alert("Please enter your full name");
       return;
@@ -112,9 +112,9 @@ export default function CheckoutPage() {
     try {
       setIsLoading(true);
 
-      
+
       let priceToSend = basePrice;
-      
+
       if (validPromo && promoData) {
         if (promoData.discountType === "PERCENTAGE") {
           priceToSend = basePrice * (1 - promoData.value / 100);
@@ -162,19 +162,19 @@ export default function CheckoutPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
       <div className="space-y-4 sm:space-y-6 mb-4">
-        
+
         <div className="flex w-[74px] h-[20px] text-[#000000] justify-between items-center hover:cursor-pointer py-6">
           <button
             onClick={() => router.back()}
             className="flex justify-between items-center w-[74px] h-[20px]"
           >
             <ArrowLeft size={20} />
-            <span className="block text-[14px] leading-[18px]">Details</span>
+            <span className="block text-[14px] leading-[18px] hover:cursor-pointer">Details</span>
           </button>
         </div>
 
         <div className="flex flex-col lg:flex-row justify-between gap-6 lg:gap-8">
-          <div className="w-full lg:w-[739px] px-[24px] py-[20px] rounded-[12px] bg-[#EFEFEF] flex flex-col gap-[32px]">
+          <div className="w-full lg:w-[739px] h-fit px-[24px] py-[20px] rounded-[12px] bg-[#EFEFEF] flex flex-col gap-[16px]">
             <div className="flex flex-col sm:flex-row gap-[24px]">
               <div className="flex flex-col w-full sm:w-[333px] gap-[8px]">
                 <span className="text-[#5B5B5B] leading-[18px] text-[14px]">
@@ -235,11 +235,22 @@ export default function CheckoutPage() {
                     ✓ Promo code applied! You saved ₹{discount.toFixed(2)}
                   </span>
                 )}
+
+                <div className="flex gap-2 items-center py-2">
+                  <input
+                    type="checkbox"
+                    className="accent-black w-4 h-4 cursor-pointer"
+                  />
+                  <span className="text-[12px] leading-[16px] font-normal text-[#5B5B5B]">
+                    I agree to the terms and safety policy
+                  </span>
+                </div>
+
               </div>
             </div>
           </div>
 
-          
+
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             <div className="w-full lg:w-[387px] px-[24px] py-[24px] rounded-[12px] bg-[#EFEFEF] flex flex-col gap-4">
               <div className="w-full flex justify-between items-center">
