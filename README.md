@@ -1,5 +1,145 @@
+# 🧭 BookIt
 
-# 🟢 Public Endpoints (Assignment Requirements)
+BookIt is a full-stack experience booking platform that allows users to browse experiences, view available slots, apply promo codes, and confirm bookings. It's built with **Next.js**, **Express.js**, and **Prisma**, offering a seamless and responsive experience.
+
+---
+
+## 🚀 Features
+
+- 🏝️ Browse and explore curated experiences  
+- 🗓️ View available slots by date and time  
+- 💰 Apply promo codes for discounts  
+- 📦 Real-time slot availability updates  
+- 🔐 Secure booking flow  
+
+---
+
+## 🧩 Tech Stack
+
+**Frontend:** Next.js, TypeScript, Tailwind CSS  
+**Backend:** Express.js, Prisma, Node.js  
+**Database:** PostgreSQL  
+**Deployment:** Vercel (Frontend) + Render / Railway (Backend)
+
+---
+
+## ⚙️ Project Setup
+
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/Mohfazam/BookIt.git
+cd BookIt
+```
+
+### 2️⃣ Backend Setup
+
+```bash
+cd backend
+npm install
+```
+
+Create a `.env` file in the `backend` folder:
+
+```env
+DATABASE_URL="postgresql://<username>:<password>@localhost:5432/bookit"
+PORT=4000
+```
+
+Generate Prisma client and start the server:
+
+```bash
+npx prisma generate
+npm run dev
+```
+
+### 3️⃣ Frontend Setup
+
+```bash
+cd ../frontend
+npm install
+npm run dev
+```
+
+The frontend will run on `http://localhost:3000`
+
+### 🌐 Environment Variables (Frontend)
+Create a `.env.local` in the frontend folder:
+
+```env
+NEXT_PUBLIC_API_BASE_URL="http://localhost:4000/api"
+```
+
+---
+
+## 🧱 Folder Structure
+
+```
+BookIt/
+├── backend/
+│   ├── prisma/
+│   ├── src/
+│   │   ├── routes/
+│   │   └── index.ts
+│   ├── package.json
+│   └── .env
+│
+└── frontend/
+    ├── src/
+    │   ├── app/
+    │   ├── components/
+    │   └── lib/
+    ├── package.json
+    └── .env.local
+```
+
+---
+
+## 🔗 API Endpoints
+
+### Public Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/public/experiences` | Fetch all experiences |
+| GET | `/api/public/experiences/:id` | Fetch single experience details |
+| GET | `/api/public/promos/:code` | Validate a promo code |
+
+### Booking Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/book` | Create a booking |
+
+---
+
+## 🧠 Promo Code Logic
+
+- Each promo has a code (`SAVE10`, `FLAT100`)
+- Can be percentage-based or flat value
+- Automatically checks validity and status before applying
+
+---
+
+## 📸 Screenshots
+
+Add a few screenshots from your running app here (Home, Experience Detail, Checkout)
+
+---
+
+## 🧑‍💻 Developer
+
+**Mohammed Sarwar Khan**
+
+- [Resume](https://drive.google.com/file/d/1qD-kUkfvaTRNuQuBgZ1d8-qxxSw2l31k/view?usp=drive_link)
+- [LinkedIn](www.linkedin.com/in/mohammed-sarwar-khan)
+- [GitHub](https://github.com/Mohfazam)
+
+---
+
+## 📦 Deployment
+
+- **Frontend:** Vercel → https://bookit.vercel.app
+- **Backend:** Vercel
+
+---
 
 | Method | Endpoint              | Description                                                                                  | Access  |
 |:-------|:----------------------|:---------------------------------------------------------------------------------------------|:--------|
