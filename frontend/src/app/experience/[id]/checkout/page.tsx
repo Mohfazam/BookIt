@@ -220,7 +220,7 @@ export default function CheckoutPage() {
                   <button
                     onClick={validatePromo}
                     disabled={isLoading || validPromo}
-                    className="w-full sm:w-[71px] h-[42px] px-[16px] py-[12px] rounded-[8px] bg-[#161616] text-[14px] leading-[18px] text-[#F9F9F9] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2a2a2a] transition-colors"
+                    className="w-full sm:w-[71px] h-[42px] px-[16px] py-[12px] rounded-[8px] bg-[#161616] text-[14px] leading-[18px] text-[#F9F9F9] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2a2a2a] transition-colors hover:cursor-pointer"
                   >
                     {validPromo ? "Applied" : "Apply"}
                   </button>
